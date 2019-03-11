@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cities in Oregon</title>
+    <title>Wallowa County, OR: Land Use History and Rangeland Monitoring </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -282,22 +282,25 @@
         esriworldshadedrelief: {layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}.png')},
 
         wcounty: {layer: L.geoJson.ajax('../../assets/wcboundary.geojson')},
+        wcountydet: {layer: L.geoJson.ajax('../../assets/wcboundarycompL.json')},
         nwstates: {layer: L.geoJson.ajax('../../assets/statesnw_L.json')},
         nphist: {layer: L.geoJson.ajax('../../assets/nphistdist.geojson')},
         np1855: {layer: L.geoJson.ajax('../../assets/np1855treat.geojson')},
         nwres: {layer: L.geoJson.ajax('../../assets/reservationsnw.geojson')},
         npres: {layer: L.geoJson.ajax('../../assets/npreservations.geojson')},
-        landman: {layer: L.geoJson.ajax('../../assets/landmanagement.Json')}
+        landman: {layer: L.geoJson.ajax('../../assets/landmanagement.Json')},
+        rmuallot: {layer: L.geoJson.ajax('../../assets/rmuallotL.Json')},
+        rmusub: {layer: L.geoJson.ajax('../../assets/rmusubL.Json')}
     };
 
     var scenes = {
         // overview: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'Cover Page', layers: []},
         portland: {lat: 45.5186089, lng: -122.7270297, zoom: 11, name: 'Portland', layers: []},
         nezperce: {lat: 45.540, lng: -117.60, zoom: 8, name: 'nezperce', layers: [layers.nwstates,layers.wcounty,layers.nphist,layers.np1855,layers.nwres,layers.npres]},
-        western: {lat: 45.540, lng: -117.60, zoom: 10, name: 'western', layers: [layers.landman]},
-        nlcd: {lat: 45.563613, lng: -117.208371, zoom: 10, name: 'nlcd', layers: [layers.nwstates,layers.wcounty]},
-        forest: {lat: 45.563613, lng: -117.208371, zoom: 10, name: 'forest', layers: [layers.nwstates,layers.wcounty]},
-        prairie: {lat: 45.563613, lng: -117.208371, zoom: 7, name: 'prairie', layers: [layers.nwstates,layers.wcounty]},
+        western: {lat: 45.540, lng: -117.60, zoom: 10, name: 'western', layers: [layers.landman,layers.rmuallot,layers.rmusub,layers.wcountydet]},
+        nlcd: {lat: 45.540, lng: -117.60, zoom: 10, name: 'nlcd', layers: [layers.wcountydet]},
+        forest: {lat: 45.540, lng: -117.60, zoom: 10, name: 'forest', layers: [layers.wcountydet]},
+        prairie: {lat: 45.540, lng: -117.60, zoom: 10, name: 'prairie', layers: [layers.wcountydet]},
         end: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'The End'}
     };
 
