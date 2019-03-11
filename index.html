@@ -34,7 +34,7 @@
     <!--jquery-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-   
+
     <!--boostrap-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!--leaflet.ajax for asynchronously adding geojson data-->
@@ -53,15 +53,16 @@
 <div id="storymap" class="container-fluid">
     <div class="row">
         <div class="col-sm-6 col-md-4 storymap-story">
-            <section data-scene="overview" data-background="../../assets/portland.mp4">
+            <section data-scene="overview" data-background="../../img/wcranch.png">
                 <div class="fullscreen text-center">
 
-                    <h1 class="display-4 d-flex justify-content-center">Cities in Oregon</h1>
+                    <h1 class="display-4 d-flex justify-content-center">Wallowa County, Oregon: Land Tenure, Land Cover, and Rangeland Monitoring</h1>
 
-
-                    <small class="d-flex justify-content-center" style="color: rgba(255,255,255,0.95)">This story map
-                        illustrates the major cities in
-                        Oregon using a storytelling structure.
+                    <small class="d-flex justify-content-center" style="color: rgba(255,255,255,0.95)">Wallowa County has a long and proud history of working lands
+                      stewardship and ranching and timber harvest are still the foundation of the local economy, industries that are dependent on healthy rangeland and
+                       forest habitats.  Changes in land ownership and resource mangement policy have lead to habitat changes my threaten that stability of the of this
+                       social ecological system and the the lifestyles it supports.  For this reason the local community has come together in a call for a community-based
+                       rangeland assessment and montioring system.
                     </small>
                 </div>
             </section>
@@ -87,8 +88,8 @@
                     the eighth most popular American city, based on where people want to live. </p>
             </section>
 
-            <section data-scene="corvallis">
-                <h2>Corvallis</h2>
+            <section data-scene="nezperce">
+                <h2>Nez Perce Land Tenure and Management</h2>
                 <p>Corvallis is a city in central western Oregon, United States. It is the county seat of Benton County
                     and the principal city of the Corvallis, Oregon Metropolitan Statistical Area, which encompasses all
                     of Benton County. As of the 2010 United States Census, the population was 54,462. Its population was
@@ -110,8 +111,8 @@
                     over.</p>
             </section>
 
-            <section data-scene="eugene">
-                <h2>Eugene</h2>
+            <section data-scene="western">
+                <h2>Western Land Tenure and Management</h2>
                 <p>Eugene is a city of the Pacific Northwest located in the U.S. state of Oregon. It is located at the
                     southern end of the Willamette Valley, near the confluence of the McKenzie and Willamette Rivers,
                     about 50 miles (80 km) east of the Oregon Coast.</p>
@@ -128,8 +129,8 @@
                     Championships.</p>
             </section>
 
-            <section data-scene="salem">
-                <h2>Salem</h2>
+            <section data-scene="nlcd">
+                <h2>General Habitat Distribution</h2>
                 <p>Salem is the capital of the U.S. state of Oregon, and the county seat of Marion County. It is located
                     in the center of the Willamette Valley alongside the Willamette River, which runs north through the
                     city. The river forms the boundary between Marion and Polk counties, and the city neighborhood of
@@ -147,8 +148,8 @@
                     Oregon Route 22, which connects West Salem across the Willamette River via the Marion Street and
                     Center Street bridges.</p>
             </section>
-            <section data-scene="bend">
-                <h2>Bend</h2>
+            <section data-scene="forest">
+                <h2>Forest Habitat Issues</h2>
                 <p>Bend is a city in, and the county seat of Deschutes County, Oregon, United States. It is the
                     principal city of the Bend, Oregon Metropolitan Statistical Area. Bend is Central Oregon's largest
                     city, and despite its modest size, is the de facto metropolis of the region, owing to the low
@@ -165,8 +166,8 @@
                     ranked Bend as one of The 10 Best Places to Live Now.</p>
             </section>
 
-            <section data-scene="oregon">
-                <h2>Oregon</h2>
+            <section data-scene="prairie">
+                <h2>Prairie Habitat Issues</h2>
                 <p>Oregon was inhabited by many indigenous tribes before Western traders, explorers, and settlers
                     arrived. An autonomous government was formed in the Oregon Country in 1843 before the Oregon
                     Territory was created in 1848. Oregon became the 33rd state on February 14, 1859. Today, at 98,000
@@ -278,23 +279,31 @@
                 id: 'mapbox.satellite'
             })
         },
-        cartodb_light: {layer: L.tileLayer('http://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png')}
+        esriworldshadedrelief: {layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}.png')},
+
+        wcounty: {layer: L.geoJson.ajax('../../assets/wcboundary.geojson')},
+        nwstates: {layer: L.geoJson.ajax('../../assets/statesnw_L.json')},
+        nphist: {layer: L.geoJson.ajax('../../assets/nphistdist.geojson')},
+        np1855: {layer: L.geoJson.ajax('../../assets/np1855treat.geojson')},
+        nwres: {layer: L.geoJson.ajax('../../assets/reservationsnw.geojson')},
+        npres: {layer: L.geoJson.ajax('../../assets/npreservations.geojson')},
+        landman: {layer: L.geoJson.ajax('../../assets/landmanagement.Json')}
     };
 
     var scenes = {
-        overview: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'Cover Page', layers: []},
+        // overview: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'Cover Page', layers: []},
         portland: {lat: 45.5186089, lng: -122.7270297, zoom: 11, name: 'Portland', layers: []},
-        corvallis: {lat: 44.5701158, lng: -123.2949388, zoom: 14, name: 'Corvallis', layers: [layers.ESRI]},
-        eugene: {lat: 44.0549563, lng: -123.0958048, zoom: 13, name: 'Eugene', layers: []},
-        salem: {lat: 44.9419055, lng: -123.0356407, zoom: 13, name: 'Salem', layers: []},
-        bend: {lat: 44.0519385, lng: -121.3042125, zoom: 14, name: 'Bend', layers: [layers.counties, layers.satellite]},
-        oregon: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'Oregon State', layers: [layers.GEE]},
+        nezperce: {lat: 45.540, lng: -117.60, zoom: 8, name: 'nezperce', layers: [layers.nwstates,layers.wcounty,layers.nphist,layers.np1855,layers.nwres,layers.npres]},
+        western: {lat: 45.540, lng: -117.60, zoom: 10, name: 'western', layers: [layers.landman]},
+        nlcd: {lat: 45.563613, lng: -117.208371, zoom: 10, name: 'nlcd', layers: [layers.nwstates,layers.wcounty]},
+        forest: {lat: 45.563613, lng: -117.208371, zoom: 10, name: 'forest', layers: [layers.nwstates,layers.wcounty]},
+        prairie: {lat: 45.563613, lng: -117.208371, zoom: 7, name: 'prairie', layers: [layers.nwstates,layers.wcounty]},
         end: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'The End'}
     };
 
     $('#storymap').storymap({
         scenes: scenes,
-        baselayer: layers.cartodb_light,
+        baselayer: layers.esriworldshadedrelief,
         legend: true, // if you do not want a legend feature, you can simply not define the createLegend function.
         credits: "",
         loader: true,
