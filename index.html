@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"/>
 
     <!--add favicon for the web page-->
     <link rel="shortcut icon" href="../../img/favicon.ico" type="image/x-icon">
@@ -44,7 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
     <script src="js/globeminimap.js"></script>
-
+    <!-- <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script> -->
     <!--story map plugin-->
     <script src="js/storymap.2.5.js"></script>
 </head>
@@ -233,36 +233,56 @@
 <script type="text/javascript">
 
 
-    // Create Legend Contents in html format
-    var county_legend = '<i style="background: orange; opacity: 0.5"></i><p><b>Counties</b></p>';
-    var forest_legend = '<i style="background: green; opacity: 0.5"></i><p><b>Forest</b></p>';
+  // Create Legend Contents
+    var lc_leg_tit =  '<b> NLCD Land Cover Classes</b><br />';
+    var lc_leg_for =  '<i style="background: rgb(28, 99, 48); opacity: 0.5"></i><p><b>Evergreen Forest</b></p>';
+    var lc_leg_scr =  '<i style="background: rgb(204, 186, 124); opacity: 0.5"></i><p><b>Shrub/Scrub</b></p>';
+    var lc_leg_her =  '<i style="background: rgb(226, 226, 93); opacity: 0.5"></i><p><b>Herbaceous</b></p>';
+    var lc_leg_cro =  '<i style="background: rgb(170, 112, 40); opacity: 0.5"></i><p><b>Cultivated Crops</b></p>';
+    var lc_leg_hay =  '<i style="background: rgb(219, 216, 60); opacity: 0.5"></i><p><b>Hay/Pasture</b></p>';
+    var lc_leg_dev =  '<i style="background: rgb(237, 0, 0); opacity: 0.5"></i><p><b>Developed</b></p>';
 
-    // For each layer, the first variable is the layer, the second is the legend. The layer variable can be any kinds of layers that leaflet.js supports.
-    // var layers = {
-    //      layer1: {layer: layer1, legend: legend1},
-    //      layer2: {layer: layer2, legend: legend2}
-    //      ...
-    // }
+    var el_leg_tit =  '<b> Elevation Classes (ft)</b><br />';
+    var el_leg_1000 =  '<i style="background: rgb(225, 225, 200); opacity: 0.5"></i><p><b>Under 1000</b></p>';
+    var el_leg_2000 =  '<i style="background: rgb(215, 194, 158); opacity: 0.5"></i><p><b>Under 2000</b></p>';
+    var el_leg_3100 =  '<i style="background: rgb(112, 168, 0); opacity: 0.5"></i><p><b>Under 3100</b></p>';
+    var el_leg_5100 =  '<i style="background: rgb(230, 230, 0); opacity: 0.5"></i><p><b>Under 5100</b></p>';
+    var el_leg_5500 =  '<i style="background: rgb(168, 112, 0); opacity: 0.5"></i><p><b>Under 5500</b></p>';
+    var el_leg_7520 =  '<i style="background: rgb(204, 204, 204); opacity: 0.5"></i><p><b>Under 7500</b></p>';
+    var el_leg_9820 =  '<i style="background: rgb(255, 255, 255); opacity: 0.5"></i><p><b>Under 9825</b></p>';
+
+    var np_leg_hist =  '<i style="background: gold; opacity: 0.5"></i><p><b>Nez Perce Historic territory</b></p>';
+    var np_leg_trt1 =  '<i style="background: orange; opacity: 0.5"></i><p><b>1855 Treaty</b></p>';
+    var np_leg_trt2 =  '<i style="background: orangered; opacity: 0.5"></i><p><b>1863 Treaty/Current Nez Perce Reservation</b></p>';
+    var np_leg_NPoth =  '<i style="background: orangered; opacity: 0.5"></i><p><b>Other Reservation, NP present</b></p>';
+    var np_leg_nares =  '<i style="background: black; opacity: 0.5"></i><p><b>Other Reservation</b></p>';
+
+    var lo_leg_tit =  '<b> Land Tenure Class</b><br />';
+    var lo_leg_usfs =  '<i style="background: rgb(76, 115, 0); opacity: 0.5"></i><p><b>US Forest Service</b></p>';
+    var lo_leg_usfswa =  '<i style="background: rgb(112, 168, 0); opacity: 0.5"></i><p><b>USFS Wilderness Area</b></p>';
+    var lo_leg_blm =  '<i style="background: rgb(132, 0, 168); opacity: 0.5"></i><p><b>US Bureau of Land Management</b></p>';
+    var lo_leg_state =  '<i style="background: rgb(168, 112, 0); opacity: 0.5"></i><p><b>State of Oregon</b></p>';
+    var lo_leg_tnc =  '<i style="background: rgb(168, 112, 0); opacity: 0.5"></i><p><b>The Nature Conservancy</b></p>';
+    var lo_leg_private =  '<i style="background: rgb(0, 112, 255); opacity: 0.5"></i><p><b>Private</b></p>';
+
+    var ltf_leg_tit =  '<b> Forest Biomass Trend Class</b><br />';
+    var ltf_leg_mag =  '<i style="background: rgb(38, 115, 0); opacity: 0.5"></i><p><b>Major Gain</b></p>';
+    var ltf_leg_mig =  '<i style="background: rgb(112, 168, 0); opacity: 0.5"></i><p><b>Minor Gain</b></p>';
+    var ltf_leg_sta =  '<i style="background: rgb(255, 170, 0); opacity: 0.5"></i><p><b>Stasis</b></p>';
+    var ltf_leg_mil =  '<i style="background: rgb(230, 230, 0); opacity: 0.5"></i><p><b>Minor Loss</b></p>';
+    var ltf_leg_mal =  '<i style="background: rgb(255, 255, 190); opacity: 0.5"></i><p><b>Major Loss</b></p>';
+
+    var ltp_leg_tit =  '<b> Prairie Biomass Trend Class</b><br />';
+    var ltp_leg_mag =  '<i style="background: rgb(115, 38, 0); opacity: 0.5"></i><p><b>Major Gain</b></p>';
+    var ltp_leg_mig =  '<i style="background: rgb(168, 56, 0); opacity: 0.5"></i><p><b>Minor Gain</b></p>';
+    var ltp_leg_sta =  '<i style="background: rgb(255, 170, 0); opacity: 0.5"></i><p><b>Stasis</b></p>';
+    var ltp_leg_mil =  '<i style="background: rgb(230, 230, 0); opacity: 0.5"></i><p><b>Minor Loss</b></p>';
+    var ltp_leg_mal =  '<i style="background: rgb(255, 255, 190); opacity: 0.5"></i><p><b>Major Loss</b></p>';
+
+
 
     var layers = {
         ESRI: {layer: L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}')},
-        counties: {
-            layer: L.geoJson.ajax('../../assets/counties.geojson', {
-                color: 'orange',
-                weight: 2,
-                opacity: 0.3
-            }), legend: county_legend
-        },
-        GEE: {
-            layer: L.tileLayer('http://earthengine.google.org/static/hansen_2013/tree_alpha/{z}/{x}/{y}.png'),
-            legend: forest_legend
-        },
-
-        satellite: {
-            layer: L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw', {
-                id: 'mapbox.satellite'
-            })
-        },
 
         esriworldshadedrelief: {layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}.png')},
 
@@ -271,22 +291,27 @@
             maxZoom: 10,
             tms:false,
             opacity: 0.6,
-            attribution: 'Dataset NLCD-11, Tiles generated by QTiles'}
-        )},
+            attribution: 'Dataset NLCD-11, Tiles generated by QTiles'
+        }), legend: [lc_leg_tit, lc_leg_for, lc_leg_scr, lc_leg_her, lc_leg_cro, lc_leg_hay, lc_leg_dev]
+      },
 
         forgain: {layer: L.tileLayer('assets/forestgain/{z}/{x}/{y}.png',{
             maxZoom: 10,
             tms:false,
             opacity: 1.0,
-            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'}
-        )},
+            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'
+          }), legend: [ltf_leg_tit, ltf_leg_mag, ltf_leg_mig, ltf_leg_sta, ltf_leg_mil, ltf_leg_mal]
+        },
+
+
 
         pragain: {layer: L.tileLayer('assets/prairiegain/{z}/{x}/{y}.png',{
             maxZoom: 10,
             tms:false,
             opacity: 1.0,
-            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'}
-        )},
+            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'
+          }), legend: [ltp_leg_tit, ltp_leg_mag, ltp_leg_mig, ltp_leg_sta, ltp_leg_mil, ltp_leg_mal]
+        },
 
         forgain2: {layer: L.tileLayer('assets/forestgain/{z}/{x}/{y}.png',{
             maxZoom: 10,
@@ -313,14 +338,25 @@
             maxZoom: 10,
             tms:false,
             opacity: 0.7,
+            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'
+          }), legend: [el_leg_tit, el_leg_1000, el_leg_2000, el_leg_3100, el_leg_5100, el_leg_5500, el_leg_7520, el_leg_9820]
+        },
+
+        elevc2: {layer: L.tileLayer('assets/elevcolor/{z}/{x}/{y}.png',{
+            maxZoom: 10,
+            tms:false,
+            opacity: 0.7,
             attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'}
-        )},
+          )},
+
         ltenure: {layer: L.tileLayer('assets/landtenure/{z}/{x}/{y}.png',{
             maxZoom: 10,
             tms:false,
             opacity: 0.6,
-            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'}
-        )},
+            attribution: 'Dataset generated by LandTrendr, Tiles generated by QTiles'
+          }), legend: [lo_leg_tit, lo_leg_usfs, lo_leg_usfswa, lo_leg_blm, lo_leg_state, lo_leg_tnc, lo_leg_private]
+        },
+
 
         wcounty: {layer: L.geoJson.ajax('assets/wcboundary.geojson',{
             color: 'black',
@@ -340,23 +376,32 @@
         nphist: {layer: L.geoJson.ajax('assets/nphistdist.geojson',{
             color: 'gold',
             weight: 2,
-            opacity: 0.8}
-        )},
+            opacity: 0.8
+          }), legend: np_leg_hist
+        },
+
         np1855: {layer: L.geoJson.ajax('assets/np1855treat.geojson',{
             color: 'orange',
             weight: 2,
-            opacity: 0.8}
-        )},
+            opacity: 0.8
+          }), legend: np_leg_trt1
+        },
+
         nwres: {layer: L.geoJson.ajax('assets/reservationsnw.geojson',{
             color: 'black',
             weight: 2,
-            opacity: 0.4}
-          )},
+            opacity: 0.4
+          }), legend: np_leg_trt2
+        },
+
+
         npres: {layer: L.geoJson.ajax('assets/npreservations.geojson',{
             color: 'orangered',
             weight: 2,
-            opacity: 0.8}
-          )},
+            opacity: 0.8
+          }), legend: np_leg_nares
+        },
+
         // landman: {layer: L.geoJson.ajax('assets/landmanagement.Json',{
         //     color: 'blue',
         //     weight: 2,
@@ -376,14 +421,14 @@
 
     var scenes = {
         // overview: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'Cover Page', layers: []},
-        wallowa: {lat: 44.540, lng: -119.40, zoom: 8, name: 'wallowa', layers: [layers.nwstates,layers.elevc,layers.wcountydet,layers.mboxroadswater]},
-        nezpercet: {lat: 46.640, lng: -118.90, zoom: 8, name: 'nezperce', layers: [layers.nwstates,layers.elevc,layers.wcountydet,layers.nphist,layers.np1855,layers.nwres,layers.npres,layers.mboxroadswater]},
-        nezpercem: {lat: 45.540, lng: -117.70, zoom: 10, name: 'nezperce', layers: [layers.elevc,layers.wcountydet,layers.mboxroadswater]},
-        western: {lat: 45.540, lng: -117.70, zoom: 10, name: 'western', layers: [layers.ltenure,layers.wcountydet,layers.mboxroadswater]},
-        nlcd: {lat: 45.540, lng: -117.70, zoom: 10, name: 'nlcd', layers: [layers.nlcd,layers.mboxroadswater,layers.wcountydet]},
-        forest: {lat: 45.540, lng: -117.70, zoom: 10, name: 'forest', layers: [layers.forgain,layers.mboxroadswater,layers.wcountydet]},
-        prairie: {lat: 45.540, lng: -117.70, zoom: 10, name: 'prairie', layers: [layers.pragain,layers.mboxroadswater,layers.wcountydet]},
-        wcrams: {lat: 45.540, lng: -117.70, zoom: 10, name: 'prairie', layers: [layers.pragain2,layers.forgain2,layers.mboxroadswater,layers.wcountydet]},
+        wallowa: {lat: 44.340, lng: -120.40, zoom: 8, name: 'wallowa', layers: [layers.nwstates,layers.elevc,layers.wcountydet,layers.mboxroadswater]},
+        nezpercet: {lat: 46.640, lng: -118.90, zoom: 8, name: 'nezperce', layers: [layers.nwstates,layers.elevc2,layers.wcountydet,layers.nphist,layers.np1855,layers.nwres,layers.npres,layers.mboxroadswater]},
+        nezpercem: {lat: 45.540, lng: -117.55, zoom: 10, name: 'nezperce', layers: [layers.elevc,layers.wcountydet,layers.mboxroadswater]},
+        western: {lat: 45.540, lng: -117.55, zoom: 10, name: 'western', layers: [layers.ltenure,layers.wcountydet,layers.mboxroadswater]},
+        nlcd: {lat: 45.540, lng: -117.55, zoom: 10, name: 'nlcd', layers: [layers.nlcd,layers.mboxroadswater,layers.wcountydet]},
+        forest: {lat: 45.540, lng: -117.55, zoom: 10, name: 'forest', layers: [layers.forgain,layers.mboxroadswater,layers.wcountydet]},
+        prairie: {lat: 45.540, lng: -117.55, zoom: 10, name: 'prairie', layers: [layers.pragain,layers.mboxroadswater,layers.wcountydet]},
+        wcrams: {lat: 45.540, lng: -117.55, zoom: 10, name: 'prairie', layers: [layers.pragain2,layers.forgain2,layers.mboxroadswater,layers.wcountydet]},
         end: {lat: 44.0000000, lng: -123.5000000, zoom: 7, name: 'The End'}
     };
 
