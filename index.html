@@ -279,6 +279,15 @@
     var ltp_leg_mil =  '<i style="background: rgb(230, 230, 0); opacity: 0.5"></i><p><b>Minor Loss</b></p>';
     var ltp_leg_mal =  '<i style="background: rgb(255, 255, 190); opacity: 0.5"></i><p><b>Major Loss</b></p>';
 
+// Create pop-ups
+        var popup_lt = L.popup();
+
+        function onMapClick(e) {
+            popup
+                .setContent("Click Position: " + e.latlng.toString())
+                .openOn(mymap);
+        }
+        mymap.on('click', onMapClick);
 
 
     var layers = {
